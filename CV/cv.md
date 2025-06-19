@@ -5,7 +5,7 @@
 Dion van Huyssteen  
 +27 82 326 7797  
 dion@darkervision.com  
-www.linkedin.com/in/dionvanhuyssteen/  
+[www.linkedin.com/in/dionvanhuyssteen/](https://www.linkedin.com/in/dionvanhuyssteen/)  
 Durban, South Africa  
 
 ## Professional Summary
