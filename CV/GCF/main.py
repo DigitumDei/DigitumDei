@@ -4,6 +4,7 @@ import markdown
 import os
 import shutil # For removing directories
 from google.cloud import secretmanager # Added for Secret Manager
+from weasyprint import HTML as WeasyHTML # For PDF generation
 
 # --- Configuration ---
 # Environment variables your function will use:
@@ -37,11 +38,9 @@ def fetch_and_read_cv(repo_url, cv_file_path_in_repo):
     Clones or pulls the latest version of the repo and reads the cv.md file.
     Returns the markdown content as a string.
     """
-    # Ensure the target directory for cloning is clean or non-existent
     if os.path.exists(LOCAL_REPO_PATH):
         try:
             repo = Repo(LOCAL_REPO_PATH)
-            # Check if the remote URL matches, otherwise, re-clone
             if repo.remotes.origin.url != repo_url:
                 print(f"Remote URL mismatch. Expected {repo_url}, got {repo.remotes.origin.url}. Re-cloning.")
                 shutil.rmtree(LOCAL_REPO_PATH)
@@ -102,15 +101,10 @@ def serve_cv_from_git(request):
         HTML content as a string with 'text/html' Content-Type, or an error message.
     """
     try:
+        print(request)
         gcp_project = os.environ.get("GCP_PROJECT") # Automatically available in GCF
         git_repo_url_secret_id = os.environ.get("GIT_REPO_URL_SECRET_ID")
         cv_md_file_secret_id = os.environ.get("CV_MD_FILE_SECRET_ID")
-
-        # --- Diagnostic prints ---
-        print(f"DEBUG: GCP_PROJECT = '{gcp_project}' (type: {type(gcp_project)})")
-        print(f"DEBUG: GIT_REPO_URL_SECRET_ID = '{git_repo_url_secret_id}' (type: {type(git_repo_url_secret_id)})")
-        print(f"DEBUG: CV_MD_FILE_SECRET_ID = '{cv_md_file_secret_id}' (type: {type(cv_md_file_secret_id)})")
-        # --- End Diagnostic prints ---
 
         git_repo_url = None
         cv_md_file_in_repo = None
@@ -124,7 +118,7 @@ def serve_cv_from_git(request):
             print(f"Attempting to fetch CV_MD_FILE_IN_REPO from Secret Manager (secret ID: {cv_md_file_secret_id})")
             cv_md_file_in_repo = _get_secret_value(gcp_project, cv_md_file_secret_id)
 
-        # Fallback to direct environment variables if secrets weren't fetched
+        # Fallback to direct environment variables if secrets weren't fetched, mostly for use in local testing
         if not git_repo_url:
             git_repo_url = os.environ.get("GIT_REPO_URL")
             if git_repo_url:
@@ -144,36 +138,65 @@ def serve_cv_from_git(request):
                         "or GIT_REPO_URL environment variables for the Cloud Function."
             print(error_msg)
             return error_msg, 500
-        
-        # The original code had a placeholder check, which is good to keep if direct env var is used.
-        # For secrets, the _get_secret_value would return None on failure.
-        if git_repo_url == "YOUR_GIT_REPO_URL_HERE": # Check if placeholder is still there from direct env var
-             return "Error: GIT_REPO_URL environment variable is set to a placeholder value. Please configure it correctly.", 500
-
-
+ 
         print(f"Attempting to serve: {cv_md_file_in_repo} from {git_repo_url}")
+
+        # Determine the base filename for outputs
+        cv_filename_base = "cv" # Default
+        if cv_md_file_in_repo:
+            cv_filename_base = os.path.splitext(os.path.basename(cv_md_file_in_repo))[0]
 
         md_content = fetch_and_read_cv(git_repo_url, cv_md_file_in_repo)
         
-        html_body = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
-
-        full_html = f"""
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Curriculum Vitae</title>
-            {get_basic_styling()}
-        </head>
-        <body>
-            <div class="container">
-                {html_body}
-            </div>
-        </body>
-        </html>
-        """
-        return full_html, 200, {'Content-Type': 'text/html; charset=utf-8'}
+        # Check if PDF output is requested
+        if 'pdf' in request.args:
+            print(f"PDF output requested for {cv_filename_base}.md")
+            # Convert Markdown to HTML body
+            html_body_for_pdf = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
+            
+            # Create full HTML document for WeasyPrint
+            full_html_for_pdf = f"""
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <title>Curriculum Vitae - {cv_filename_base}</title>
+                {get_basic_styling()}
+            </head>
+            <body>
+                <div class="container">
+                    {html_body_for_pdf}
+                </div>
+            </body>
+            </html>
+            """
+            pdf_bytes = WeasyHTML(string=full_html_for_pdf).write_pdf()
+            pdf_filename = f"{cv_filename_base}.pdf"
+            
+            return pdf_bytes, 200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': f'attachment; filename="{pdf_filename}"'
+            }
+        else:
+            # Original HTML serving logic
+            html_body = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
+            full_html = f"""
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Curriculum Vitae - {cv_filename_base}</title>
+                {get_basic_styling()}
+            </head>
+            <body>
+                <div class="container">
+                    {html_body}
+                </div>
+            </body>
+            </html>
+            """
+            return full_html, 200, {'Content-Type': 'text/html; charset=utf-8'}
 
     except FileNotFoundError as e:
         print(f"Error: {e}")
