@@ -141,20 +141,14 @@ def serve_cv_from_git(request):
  
         print(f"Attempting to serve: {cv_md_file_in_repo} from {git_repo_url}")
 
-        # Determine the base filename for outputs
-        cv_filename_base = "cv" # Default
-        if cv_md_file_in_repo:
-            cv_filename_base = os.path.splitext(os.path.basename(cv_md_file_in_repo))[0]
-
+        cv_filename_base = "CV-Dion-van-Huyssteen"
+        
         md_content = fetch_and_read_cv(git_repo_url, cv_md_file_in_repo)
         
-        # Check if PDF output is requested
         if 'pdf' in request.args:
             print(f"PDF output requested for {cv_filename_base}.md")
-            # Convert Markdown to HTML body
             html_body_for_pdf = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
-            
-            # Create full HTML document for WeasyPrint
+
             full_html_for_pdf = f"""
             <!DOCTYPE html>
             <html lang="en">
@@ -178,10 +172,8 @@ def serve_cv_from_git(request):
                 'Content-Disposition': f'attachment; filename="{pdf_filename}"'
             }
         else:
-            # Original HTML serving logic
             html_body = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
             
-            # Prepare links for the HTML view
             pdf_download_url = f"{request.base_url}?pdf"
             links_html = f"""<p style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
                                 <a href="{pdf_download_url}" download="{cv_filename_base}.pdf">Download as PDF</a> | <a href="{git_repo_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
