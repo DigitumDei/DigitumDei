@@ -155,7 +155,7 @@ def serve_cv_from_git(request):
         
         if 'pdf' in request.args:
             print(f"PDF output requested for {cv_filename_base}.md")
-            html_body_for_pdf = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
+            html_body_for_pdf = markdown.markdown(md_content, extensions=['fenced_code', 'tables', 'attr_list'])
 
             full_html_for_pdf = f"""
             <!DOCTYPE html>
@@ -180,7 +180,7 @@ def serve_cv_from_git(request):
                 'Content-Disposition': f'attachment; filename="{pdf_filename}"'
             }
         else:
-            html_body = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
+            html_body = markdown.markdown(md_content, extensions=['fenced_code', 'tables', 'attr_list'])
             
             pdf_download_url = f"{request.base_url}?pdf"
             links_html = f"""<p style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
