@@ -70,7 +70,7 @@ def fetch_and_read_cv(repo_url, cv_file_path_in_repo):
         md_content = f.read()
     return md_content
 
-def get_basic_styling():
+def get_basic_styling(is_pdf=False):
     """Returns some basic CSS for styling the HTML page."""
     return """
     <style>
@@ -89,7 +89,15 @@ def get_basic_styling():
         pre code { background-color: transparent; padding: 0; font-size: 100%;}
         strong { font-weight: 600; }
     </style>
+    """ + (
     """
+    <style>
+        /* PDF Specific Styles */
+        h2 {
+            page-break-before: always; /* Force new page before each H2 */
+        }
+    </style>
+    """ if is_pdf else "")
 
 @functions_framework.http
 def serve_cv_from_git(request):
@@ -155,7 +163,7 @@ def serve_cv_from_git(request):
             <head>
                 <meta charset="UTF-8">
                 <title>Curriculum Vitae - {cv_filename_base}</title>
-                {get_basic_styling()}
+                {get_basic_styling(is_pdf=True)}
             </head>
             <body>
                 <div class="container">

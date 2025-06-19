@@ -20,7 +20,7 @@ My key areas of expertise include:
 
 - **Technical Leadership**: Mentoring developers across business units, leading architectural design reviews, and optimising the SDLC to enhance team velocity and code quality.
 
-## Technical Skills
+## Technical Skills ## {.pagebreak}
 ### Languages & Frameworks:
 
 - **Core**: C#, ASP.NET Core
