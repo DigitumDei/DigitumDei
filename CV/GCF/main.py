@@ -10,11 +10,11 @@ from weasyprint import HTML as WeasyHTML # For PDF generation
 # Environment variables your function will use:
 #
 # Option 1: Using Secret Manager (Recommended)
-#   GCP_PROJECT: (Automatically available) Your Google Cloud Project ID.
+#   GCP_PROJECT: Your Google Cloud Project ID.
 #   GIT_REPO_URL_SECRET_ID: The ID of the secret in Secret Manager holding the Git repo URL.
 #   CV_MD_FILE_SECRET_ID: The ID of the secret in Secret Manager holding the path to cv.md in the repo.
 #
-# Option 2: Direct Environment Variables (Fallback)
+# Option 2: Direct Environment Variables (Fallback for localdev)
 #   GIT_REPO_URL: The HTTPS URL of your Git repository.
 #   CV_MD_FILE_IN_REPO: The path to your cv.md file within the repository.
 
@@ -180,6 +180,12 @@ def serve_cv_from_git(request):
         else:
             # Original HTML serving logic
             html_body = markdown.markdown(md_content, extensions=['fenced_code', 'tables'])
+            
+            # Prepare links for the HTML view
+            pdf_download_url = f"{request.base_url}?pdf"
+            links_html = f"""<p style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+                                <a href="{pdf_download_url}" download="{cv_filename_base}.pdf">Download as PDF</a> | <a href="{git_repo_url}" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+                             </p>"""
             full_html = f"""
             <!DOCTYPE html>
             <html lang="en">
@@ -191,6 +197,7 @@ def serve_cv_from_git(request):
             </head>
             <body>
                 <div class="container">
+                    {links_html}
                     {html_body}
                 </div>
             </body>

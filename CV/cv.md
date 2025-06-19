@@ -51,17 +51,17 @@ My expertise spans modern frameworks like ASP.NET Core, automation testing, and 
 - Developed and maintained database-driven applications in Microsoft Access.
 - Provided comprehensive IT support, ensuring system reliability and user productivity.
 
-### Certifications
+## Certifications
 
 - Microsoft Azure Fundamentals (AZ-900) - Microsoft, 2023
 
-### Education
+## Education
 
 - BTech, Information Technology (Software Development) - Durban University of Technology, 1998
 
 - National Diploma: Information Technology (Software Development) - Durban University of Technology, 1996
 
-### Projects & Personal Initiatives
+## Projects & Personal Initiatives
 
 **CodeChat** (2024-Present)
 AI-powered code analysis assistant, leveraging Large Language Models to simplify development and learning of large codebases. Leveraged this project to enhance proficiency in Python, Docker, VS Code extension development, and integration with major LLM APIs.
