@@ -5,7 +5,7 @@
 Dion van Huyssteen  
 +27 82 326 7797  
 dion@darkervision.com  
-[www.linkedin.com/in/dionvanhuyssteen/](https://www.linkedin.com/in/dionvanhuyssteen/)  
+[linkedin.com/in/dionvanhuyssteen/](https://www.linkedin.com/in/dionvanhuyssteen/)  
 Durban, South Africa  
 
 ## Professional Summary
@@ -17,7 +17,7 @@ My expertise spans modern frameworks like ASP.NET Core, automation testing, and 
 ## Technical Skills
 **Core**: C#, ASP.NET Core, REST API Design, NUnit, Git, Azure DevOps, Agile Methodologies
 
-**Proficient**: SQL Server, Python, Docker, Kubernetes, Helm, C++, Confluence
+**Proficient**: C++, SQL Server, Python, Docker, Kubernetes, Helm, Confluence, Microsoft Azure, Google Cloud
 
 **Familiar/Previous**: Win32, HTML/CSS/JavaScript, Adobe Flash, Microsoft Access
 
@@ -46,9 +46,10 @@ My expertise spans modern frameworks like ASP.NET Core, automation testing, and 
 - Ensured efficient performance and reliable data handling for user-facing applications.
 
 ### Programmer
-**African Gabions** *(January 1997 - September 2000)*
+**African Gabions** *(February 1997 - September 2000)*
 
 - Developed and maintained database-driven applications in Microsoft Access.
+- Created a factory stock sales and ordering system, deployed across two sister companies in the US and Canada—including on-site implementation and training as a junior developer.
 - Provided comprehensive IT support, ensuring system reliability and user productivity.
 
 ## Certifications
