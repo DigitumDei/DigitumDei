@@ -93,7 +93,7 @@ def get_basic_styling(is_pdf=False):
     """
     <style>
         /* PDF Specific Styles */
-        h2 {
+        #pagebreak {
             page-break-before: always; /* Force new page before each H2 */
         }
     </style>

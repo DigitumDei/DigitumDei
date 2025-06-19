@@ -43,7 +43,7 @@ My key areas of expertise include:
 
 - Confluence, Win32, HTML/CSS/JavaScript, Adobe Flash, Microsoft Access
 
-## Professional Experience
+## Professional Experience ## {: #pagebreak }
 
 ### Senior Software Developer Level 2
 **Derivco** *(October 2018 - Present)*
@@ -78,7 +78,7 @@ My key areas of expertise include:
 - Spearheaded the international rollout of this system to sister companies in the US and Canada, personally conducting on-site implementation and user training as a junior developer.
 - Provided comprehensive IT support to ensure high system reliability and user productivity.
 
-## Certifications
+## Certifications ## {: #pagebreak }
 
 - Microsoft Azure Fundamentals (AZ-900) - Microsoft, 2023
 
