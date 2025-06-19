@@ -14,7 +14,7 @@ A highly accomplished software engineer with a 25-year record of continuous grow
 
 My key areas of expertise include:
 
-- **High-Performance APIs**: Designing and building robust, scalable systems in C# and ASP.NET Core for high-throughput financial transactions (60,000+ TPM).
+- **High-Performance APIs**: Designing and building robust, scalable systems in C# and ASP.NET Core for high-throughput financial transactions (60k TPM).
 
 - **AI & Innovation**: Championing and building practical AI tools with Large Language Models (LLMs) that demonstrably accelerate developer onboarding and productivity.
 
